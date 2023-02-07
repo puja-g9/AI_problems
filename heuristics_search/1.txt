@@ -1,0 +1,61 @@
+G=[[(7,636),(2,639),(5,622)], #0
+   [(9,647),(4,689),(5,667)], #1
+   [(3,648),(6,664),(4,697),(0,639)], #2
+   [(11,644),(12,676),(3,655),(2,648),(4,650)], #3
+   [(1,689),(9,665),(10,675),(3,648),(2,697),(5,689)], #4
+   [(1,667),(4,689),(0,622)], #5
+   [(12,638),(7,687),(3,655),(2,664)], #6
+   [(6,687),(0,636)], #7
+   [(9,659),(10,643),(11,665)], #8
+   [(1,647),(4,665),(10,628),(8,659)], #9
+   [(8,643),(9,628),(4,675)], #10
+   [(8,665),(3,644),(12,656)], #11
+   [(11,656),(6,638),(3,676)] #12
+   ]
+
+src=1
+dest=6
+
+
+
+Heu=[366.10, 433.88, 245.87, 145.68, 300.54, 424.71, 157.96, 315.93, 321.56, 364.59, 237.39, 158.04,0] #heuristic value
+
+
+from queue import   PriorityQueue
+#priority queue
+pq= PriorityQueue()  
+
+
+#parent list
+num=13
+P=[-100]*num
+
+
+#inserting f(src),src,g(src),parnt
+pq.put((366.10, 1, 366.10, 1)) 
+
+
+
+while not (pq.empty()):
+  (fn, n, gn, parent) =pq.get() #extract mean 
+  curNode=n
+  if curNode == dest:
+    P[curNode]=parent
+    break
+  if P[curNode] != -100:
+     continue
+  P[curNode]=parent
+  for v in G[curNode]:
+     gv=gn + v[1] #v[1]-weight
+     hv=Heu[v[0]]
+     fv=gv + hv
+     pq.put((fv,v[0],gv,curNode))
+     
+     
+  
+
+d=dest #dest-6
+
+while (d != P[d]):
+     print(d)
+     d=P[d]

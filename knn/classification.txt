@@ -1,0 +1,60 @@
+from google.colab import drive
+drive.mount('/content/gdrive')
+
+from numpy import genfromtxt
+import random
+import numpy as np
+import math
+
+path='/content/drive/MyDrive/Colab Notebooks/iris.csv'
+my_data = genfromtxt(path, delimiter=',')
+data = my_data.tolist()
+
+random.shuffle(data)
+
+Train_set=[]
+Valid_set=[]
+Test_set=[]
+
+for sample in data:
+  R=random.uniform(0,1)
+  if R>=0 and R<=0.7:
+    Train_set.append(sample)
+  elif R>0.7 and R<0.85:
+    Valid_set.append(sample)
+  else:
+    Test_set.append(sample)
+
+Distance=[]
+k=1
+check=0
+answr=0
+for v in Valid_set:
+  valset=v
+  for t in Train_set:
+    trainset=t
+    distance=0
+     #euclidean distance
+    distance = ((float(t[0])-float(v[0]))**2
+                 +(float(t[1])-float(v[1]))**2
+                   +(float(t[2])-float(v[2]))**2
+                     +(float(t[3])-float(v[3]))**2) 
+    Distance.append((math.sqrt(distance),t))
+    Distance.sort()
+
+    zero=0
+    one=0
+    two=0
+    
+    Dict = {} 
+    for l in range(k): 
+      if Distance[l][1][-1] in Dict.keys():
+        Dict[Distance[l][1][-1]] = Dict[Distance[l][1][-1]] + 1
+      else:
+        Dict[Distance[l][1][-1]] = 1 
+      class_max=max(Dict, key=Dict.get)
+    if v[-1]==class_max:
+      answr=answr+1
+ 
+accuracy = (answr / len(Valid_set))*100
+print("Accuracy: ",accuracy) 
